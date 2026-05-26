@@ -1,0 +1,45 @@
+position_group,race,count,position_total,percent_of_position
+DB,Black,151,214,70.56
+DB,Latino,26,214,12.15
+DB,White,21,214,9.81
+DB,Asian,12,214,5.61
+DB,N/A (Scrape Failed),3,214,1.4
+DB,Middle Eastern,1,214,0.47
+DL,Black,285,404,70.54
+DL,White,68,404,16.83
+DL,Latino,27,404,6.68
+DL,Asian,17,404,4.21
+DL,N/A (Scrape Failed),5,404,1.24
+DL,Middle Eastern,2,404,0.5
+LB,Black,29,54,53.7
+LB,White,21,54,38.89
+LB,Latino,3,54,5.56
+LB,Asian,1,54,1.85
+OL,White,245,502,48.8
+OL,Black,182,502,36.25
+OL,Latino,50,502,9.96
+OL,Asian,15,502,2.99
+OL,Middle Eastern,5,502,1.0
+OL,N/A (Scrape Failed),5,502,1.0
+QB,White,78,120,65.0
+QB,Black,26,120,21.67
+QB,Latino,7,120,5.83
+QB,Middle Eastern,6,120,5.0
+QB,Asian,2,120,1.67
+QB,N/A (Scrape Failed),1,120,0.83
+RB,Black,119,148,80.41
+RB,White,20,148,13.51
+RB,Asian,4,148,2.7
+RB,Latino,4,148,2.7
+RB,Middle Eastern,1,148,0.68
+TE,White,84,128,65.62
+TE,Black,30,128,23.44
+TE,Latino,7,128,5.47
+TE,Middle Eastern,5,128,3.91
+TE,Asian,2,128,1.56
+WR,Black,272,377,72.15
+WR,White,61,377,16.18
+WR,Latino,24,377,6.37
+WR,Asian,17,377,4.51
+WR,N/A (Scrape Failed),2,377,0.53
+WR,Middle Eastern,1,377,0.27

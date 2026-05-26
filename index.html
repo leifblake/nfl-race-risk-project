@@ -1,0 +1,1032 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="icon" type="image/png" sizes="32x32" href="/football.png">
+  <link rel="apple-touch-icon" href="/football.png">
+
+  <title>Racial Stacking, Bodily Risk, and Institutional Power in the NFL</title>
+
+  <link rel="stylesheet" href="./src/style.css" />
+</head>
+
+<body>
+  <header class="site-header">
+    <nav class="nav" aria-label="Main navigation">
+      <a href="#intro">Intro</a>
+      <a href="#history">History</a>
+      <a href="#institutional">Institutions</a>
+      <a href="#risk">Risk</a>
+      <a href="#media">Media</a>
+      <a href="#reform">Reform</a>
+      <a href="#conclusion">Conclusion</a>
+      <a href="#bibliography">Bibliography</a>
+    </nav>
+
+    <section class="hero">
+      <p class="eyebrow">NFL Race, Labor, and Data Visualization</p>
+      <h1>Racial Stacking, Bodily Risk, and Institutional Power in the NFL</h1>
+
+      <p class="hero-text">
+        This project examines how racialized positional segregation in football shaped who was trusted to lead,
+        who was expected to absorb physical risk, and how those patterns continue to appear in modern NFL data.
+      </p>
+
+      <a
+        class="author-card"
+        href="https://www.linkedin.com/in/leifblake/"
+        target="_blank"
+        rel="noopener noreferrer"
+        aria-label="Visit Leif Blake's LinkedIn profile">
+        <img src="./leif.jpg" alt="Photo of Leif Blake" />
+        <span>Leif Blake</span>
+      </a>
+    </section>
+  </header>
+
+  <main>
+    <section id="intro" class="content-section">
+      <div class="section-kicker">Introduction & Methodology</div>
+      <h2>Race, Labor, and the Structure of Football</h2>
+
+      <p>
+        American football has long been presented as a meritocratic institution in which athletes succeed
+        through talent, discipline, and physical performance alone. However, sociologists studying race and
+        sport have consistently demonstrated that football positions were historically shaped through racialized
+        assumptions regarding intelligence, leadership, athleticism, and bodily labor. This project examines
+        how “racial stacking” within the National Football League (NFL) created unequal distributions of
+        positional authority, bodily risk, and institutional power. Specifically, this project argues that Black
+        athletes were disproportionately funneled into positions associated with physical sacrifice and bodily
+        exposure, while positions associated with strategic leadership and organizational authority historically
+        remained disproportionately white.
+      </p>
+
+      <p>
+        To examine these patterns, this project combines historical scholarship, sociological analysis,
+        computational methods, and data visualization. Rather than relying solely upon qualitative
+        interpretation, the project integrates demographic datasets, injury reports, roster data, positional
+        classifications, scouting language studies, and custom-built visualizations in order to examine how
+        race, positional assignment, bodily labor, and institutional authority intersect throughout modern
+        football culture.
+      </p>
+
+      <h3 class="subsection-heading">Methodology</h3>
+
+      <p>
+        The primary demographic datasets used throughout the project originated from several publicly
+        available football analytics repositories and independently cleaned datasets. Modern roster and
+        positional information was obtained through nflverse, an open-source football analytics repository
+        providing detailed weekly NFL roster data. Injury information was drawn from publicly available NFL
+        injury datasets spanning multiple seasons between 2009 and 2017. Additional demographic
+        summaries were developed through custom player metadata collection processes.
+      </p>
+
+      <p>
+        One of the largest methodological challenges involved constructing a large-scale racial demographic
+        dataset for NFL players. Early stages of the project attempted to build an independent demographic
+        database through automated scraping of player metadata from publicly available sources such as
+        Wikipedia and Pro Football Reference. Python scripts were developed to export player templates,
+        scrape metadata, and collect demographic information for thousands of active and historical NFL
+        players. For example, scripts such as <code>03_export_race_template.py</code>,
+        <code>04_auto_wikipedia_metadata.py</code>, and <code>05_create_race_data.py</code> were used to
+        automate portions of the data collection process.
+      </p>
+
+      <p>
+        However, the number of player entries quickly became too large to verify manually at scale. Because
+        manually identifying and entering demographic information for thousands of players introduced major
+        limitations involving time, verification accuracy, and consistency, the project shifted toward combining
+        publicly available datasets with machine-assisted demographic classification methods.
+      </p>
+
+      <p>
+        Several publicly available GitHub projects and football analytics repositories incorporated DeepFace
+        facial recognition tools and computer vision methods to estimate demographic classifications from
+        player headshots and metadata. While these approaches introduced limitations and ethical
+        considerations regarding racial classification, they provided a scalable foundation for examining
+        large-scale positional demographics across the NFL. Rather than treating these classifications as
+        definitive biological categories, this project uses them as broad sociological demographic groupings
+        intended to analyze structural representation patterns across football positions.
+      </p>
+
+      <p>
+        Once the datasets were collected, significant preprocessing and cleaning operations were required to
+        standardize positional categories across sources. Player positions were grouped into broader football
+        labor categories such as quarterback (QB), running back (RB), wide receiver (WR), offensive line (OL),
+        linebacker (LB), defensive line (DL), defensive back (DB), and tight end (TE). Earlier versions of the
+        injury dataset grouped all defensive players into a single “DEF” category, which obscured meaningful
+        positional variation across defensive labor. To improve positional accuracy, nflverse roster data was
+        merged into the injury dataset using Python and pandas operations.
+      </p>
+
+      <pre><code>players["injury_position_group"] = players["position_id"]
+
+merged = injuries.merge(
+    players[["name", "team", "year", "injury_position_group"]],
+    on=["name", "team", "year"],
+    how="left"
+)</code></pre>
+
+      <p>
+        This merge allowed defensive positions to be separated into DB, LB, and DL categories rather than
+        treating all defensive players as a single labor group. Additional aggregation functions calculated
+        average injury burden, cumulative games missed, player-season totals, and racial representation
+        percentages by position group. Injury burden itself was calculated using logic such as:
+      </p>
+
+      <pre><code>merged["injury_burden"] = (
+    merged["num_games_injured"] +
+    merged["num_games_missing"]
+)</code></pre>
+
+      <p>
+        The project also relied heavily upon custom D3.js and Python-based data visualization techniques.
+        Sankey diagrams, heatmaps, stacked demographic charts, bubble charts, timeline visualizations, and
+        scouting language charts were developed to visualize relationships between race, positional
+        assignment, bodily risk, organizational hierarchy, and leadership stereotypes. Rather than functioning
+        simply as aesthetic supplements, these visualizations serve as analytical tools that reveal structural
+        relationships often obscured within traditional football discourse.
+      </p>
+
+      <div class="visual-block viz-position-bars">
+        <iframe
+          class="lazy-viz"
+          data-src="./visualizations/position-race-bars/"
+          title="Modern NFL Race Distribution by Position Group"
+          scrolling="no">
+        </iframe>
+      </div>
+
+      <p>
+        The visualization above provides a baseline overview of racial representation across major NFL
+        positional groups using the cleaned 2024 NFL depth chart dataset developed for this project. Running
+        back, wide receiver, defensive back, and defensive line positions remain heavily concentrated with
+        Black athletes, while quarterback, offensive line, and tight end positions remain substantially whiter by
+        comparison. These demographic patterns establish the empirical foundation for the analyses developed
+        throughout the remainder of this project and demonstrate why positional assignment remains central to
+        understanding racial inequality within football culture.
+      </p>
+
+      <p>
+        Combining historical scholarship with computational analysis allows this project to examine racial
+        stacking not simply as a historical artifact, but as an ongoing institutional structure connecting race,
+        bodily labor, leadership, organizational authority, and physical risk within the modern NFL. The
+        following sections build upon this methodological foundation by tracing the historical origins of racial
+        stacking, examining how institutional systems reinforced positional inequality, analyzing the unequal
+        distribution of bodily risk, and exploring how media narratives and cultural discourse continue
+        reproducing these structures today.
+      </p>
+    </section>
+
+    <section id="history" class="content-section">
+      <div class="section-kicker">Section 1</div>
+      <h2>Historical Foundations of Racial Stacking</h2>
+
+      <figure class="section-image image-left">
+        <img 
+            src="./FritzPollard.jpg"
+            alt="Fritz Pollard posing with a football in an early football uniform" 
+            class="expandable-image"
+            data-caption="Fritz Pollard’s football career represents both early Black excellence in football leadership and the
+          racial barriers that shaped who was allowed to occupy positions of authority in the sport." />
+        <figcaption>
+          Fritz Pollard’s football career represents both early Black excellence in football leadership and the
+          racial barriers that shaped who was allowed to occupy positions of authority in the sport.
+        </figcaption>
+      </figure>
+
+      <p>
+        For much of American football’s history, positions were not distributed neutrally. Instead, racial
+        stereotypes shaped which athletes were trusted with leadership, intelligence, and strategic
+        decision-making responsibilities and which athletes were valued primarily for bodily labor and physical
+        performance. Sociologists refer to this process as “racial stacking,” or the disproportionate
+        concentration of racial groups into specific positions based on social assumptions rather than ability
+        alone. Within football, these patterns created a racial divide between positions associated with
+        intelligence and authority and positions associated with speed, athleticism, and physical sacrifice.
+      </p>
+
+      <p>
+        The quarterback position became one of the clearest examples of this division. Historically,
+        quarterbacks were viewed as extensions of coaching authority on the field, requiring discipline,
+        leadership, intelligence, emotional composure, and strategic understanding of the game. Because of
+        this symbolic importance, white athletes were disproportionately funneled into quarterback roles while
+        Black athletes were systematically excluded. As <em>Against Racial Stacking: The Evolution of the Black
+        Quarterback in American Football</em> explains, Black athletes were often “shifted away from quarterback
+        and into positions emphasizing speed and athleticism” (“Against Racial Stacking,” 2024). The article
+        further argues that football institutions historically framed quarterbacks as “thinking” players while Black
+        athletes were stereotyped as naturally athletic rather than intellectually capable of leadership (“Against
+        Racial Stacking,” 2024). These assumptions reinforced the belief that Black athletes were better suited
+        for physically demanding positions such as running back, wide receiver, or defensive back.
+      </p>
+
+      <p>
+        The exclusion of Black athletes from quarterback positions reflected broader racial ideologies present
+        throughout American society during the twentieth century. White athletes were often associated with
+        discipline, intelligence, leadership, and rationality, while Black athletes were framed as instinctive,
+        emotional, and naturally physical. These stereotypes allowed football institutions to justify racial
+        segregation within positional systems while presenting those outcomes as meritocratic or “natural.”
+        Rather than openly prohibiting Black quarterbacks, many coaches and scouts redirected Black athletes
+        into positions believed to better align with racial assumptions about physicality and athleticism.
+      </p>
+
+      <p>
+        These barriers remained significant even as Black athletes increasingly dominated football participation
+        overall. Black quarterbacks frequently faced pressure to switch positions at both the collegiate and
+        professional levels. Players who demonstrated elite passing ability were still commonly converted into
+        wide receivers, defensive backs, or running backs because coaches believed Black athletes lacked the
+        intellectual qualities supposedly necessary to lead offenses. <em>The Guardian</em> notes that Black
+        quarterbacks were routinely described as “athletic” or “dual-threat,” while white quarterbacks were
+        praised for “preparation, intelligence and football IQ” (Dator, 2019). Even when Black quarterbacks
+        succeeded, media narratives frequently framed their accomplishments through improvisation and raw
+        talent rather than preparation or strategic understanding of the game.
+      </p>
+
+      <div class="visual-block viz-timeline">
+        <iframe
+          class="lazy-viz"
+          data-src="./visualizations/timeline/"
+          title="Timeline of Black Quarterback and Coaching Milestones"
+          scrolling="no">
+        </iframe>
+      </div>
+
+      <p>
+        The timeline above demonstrates how slowly these barriers began to shift. Milestones involving Black
+        quarterbacks and coaches often represented moments of institutional resistance rather than simple
+        athletic progress. The relatively late emergence of Black quarterbacks in leadership roles illustrates
+        how deeply entrenched racial assumptions remained within football culture. Quarterback was never
+        treated as merely another athletic position; it became a symbolic site where ideas about race,
+        intelligence, leadership, and authority were constantly negotiated.
+      </p>
+
+      <p>
+        These racial assumptions extended beyond the quarterback position itself. Sociologists studying race
+        and sport have argued that football developed a hierarchy of “thinking” and “physical” positions that
+        mirrored broader social hierarchies. Positions such as quarterback, center, middle linebacker, and
+        coaching roles were associated with leadership and strategic authority, while positions such as running
+        back, wide receiver, and defensive back became associated with speed, aggression, and bodily
+        sacrifice. The sociology review article on race and sport explains that athletic institutions historically
+        celebrated Black athletes for physical performance while simultaneously limiting access to positions
+        associated with organizational control and intellectual authority (Coakley, 2012). In this framework,
+        Black athletes were welcomed into football primarily as performers of physical labor rather than as
+        decision-makers or institutional leaders.
+      </p>
+
+      <p>
+        These assumptions were reinforced institutionally through scouting systems, draft interviews, and
+        recruitment pipelines. Drew Brown’s <em>Race, Colonization and the NFL Draft: A Fanonian Analysis of
+        the Interviewing of Black NFL Prospects</em> argues that NFL scouting and interviewing practices
+        reproduced colonial stereotypes about Black physicality and white intellectual authority. Brown explains
+        that Black prospects were frequently evaluated through assumptions emphasizing “raw athleticism” and
+        bodily potential while white prospects were associated with leadership, discipline, and intelligence
+        (Brown, 2023). These evaluations shaped not only draft outcomes but also the positions Black athletes
+        were encouraged—or discouraged—from pursuing throughout football development systems.
+      </p>
+
+      <p>
+        Brown’s analysis is particularly important because it frames football not simply as entertainment, but as
+        a racialized labor structure. Within this structure, Black athletes became disproportionately concentrated
+        in positions involving bodily exposure, physical punishment, and athletic expendability, while white
+        athletes retained disproportionate access to positions associated with organizational authority and
+        long-term institutional power. These positional divisions reflected broader patterns of racial labor
+        stratification throughout American society, where Black workers historically performed physically
+        dangerous labor while white workers occupied supervisory or managerial positions.
+      </p>
+
+      <p>
+        Although overt racial exclusion became less socially acceptable during the late twentieth century, many
+        of these positional patterns remained structurally embedded within football development systems.
+        Youth coaching, recruiting pipelines, scouting language, and media narratives continued reproducing
+        assumptions about which athletes were “natural leaders” and which athletes were “natural athletes.”
+        As a result, historical patterns of racial stacking persisted even as the NFL became increasingly racially
+        diverse overall.
+      </p>
+
+      <div class="visual-block viz-sankey">
+        <iframe
+          class="lazy-viz"
+          data-src="./visualizations/sankey/"
+          title="Race to Position Sankey Diagram"
+          scrolling="no">
+        </iframe>
+      </div>
+
+      <p>
+        The positional demographics shown above demonstrate how these historical structures continue to
+        shape the modern NFL. Using a contemporary NFL depth chart dataset containing approximately
+        2,700 active players from the 2024 season, the Sankey diagram visualizes the racial distribution of
+        players across major positional groups. Running back, wide receiver, and defensive back positions
+        remain heavily concentrated with Black athletes, while quarterback and several offensive line positions
+        remain disproportionately white. Although the league now features far more Black quarterbacks than in
+        previous decades, the broader positional distribution still reflects historical assumptions about
+        intelligence, authority, discipline, and bodily labor. The modern NFL therefore continues to reproduce
+        many of the same positional patterns established during earlier periods of explicit racial exclusion.
+      </p>
+
+      <p>
+        Importantly, these patterns are not random outcomes of athletic preference alone. Rather, they reflect
+        decades of institutional decision-making, cultural stereotypes, and developmental systems that sorted
+        athletes according to racialized assumptions about leadership and physicality. Historical racial stacking
+        therefore established more than positional segregation—it created a racial hierarchy of football labor
+        itself. White athletes were historically associated with strategic authority and organizational leadership,
+        while Black athletes were disproportionately directed toward positions centered on bodily performance
+        and physical risk.
+      </p>
+
+      <p>
+        This historical distinction between intellectual authority and bodily labor laid the foundation for the
+        structural inequalities explored throughout the remainder of this project. Modern positional
+        demographics, injury burden disparities, and leadership hierarchies within football cannot be understood
+        separately from the historical systems that shaped who was trusted to lead and who was expected to
+        absorb physical risk on the field. While these patterns originated through overt racial segregation and
+        exclusion, they continued to persist through institutional practices embedded within scouting systems,
+        coaching pipelines, media narratives, and organizational decision-making. Understanding how these
+        structures evolved from historical prejudice into modern institutional systems is essential for examining
+        how racial inequality continues to operate throughout contemporary football culture.
+      </p>
+    </section>
+
+    <section id="institutional" class="content-section">
+      <div class="section-kicker">Section 2</div>
+      <h2>Institutional and Structural Discrimination</h2>
+
+      <p>
+        Although overt racial segregation within football declined throughout the late twentieth century, many of
+        the systems that reinforced racial inequality remained embedded within the institutional structures
+        surrounding the sport. Rather than operating primarily through explicit exclusion, modern football
+        organizations increasingly reproduced inequality through hiring systems, organizational hierarchy,
+        scouting infrastructure, and forms of unconscious racial bias. As a result, racial disparities persisted not
+        simply because of individual prejudice, but because institutions continued rewarding and reproducing
+        particular ideas about leadership, intelligence, and authority.
+      </p>
+
+      <p>
+        One of the clearest examples of this institutional inequality emerged through coaching and front office
+        hiring practices. Despite the NFL becoming overwhelmingly Black at the player level, leadership
+        positions within organizations remained disproportionately white. In <em>The NFL’s Rooney Rule and Its
+        Implications on Affirmative Action and Hiring Policies in Professional Sports</em>, Cunningham and Melton
+        (2011) argue that NFL ownership and management structures historically evaluated leadership through
+        racialized assumptions about intelligence, discipline, and organizational competence. The authors
+        explain that many owners and executives unconsciously associated white candidates with strategic
+        thinking and leadership while Black candidates were frequently perceived as less capable of managing
+        the “complexity” of football organizations (Cunningham & Melton, 2011). These assumptions helped
+        institutionalize racial hierarchy within football organizations by shaping who received access to coaching,
+        executive, and decision-making opportunities.
+      </p>
+
+      <p>
+        Importantly, these inequalities were often maintained through organizational systems that appeared
+        neutral on the surface. Coaching and executive hires frequently relied on informal professional networks,
+        ownership relationships, and long-standing organizational familiarity that overwhelmingly favored white
+        candidates. Even after the implementation of the Rooney Rule, critics argued that minority interviews
+        sometimes functioned symbolically rather than substantively. While the policy increased the visibility of
+        Black coaching candidates, it did not fundamentally restructure the institutional networks controlling
+        hiring decisions. As a result, leadership opportunities remained disproportionately concentrated among
+        white candidates despite the league’s increasingly diverse player population.
+      </p>
+
+      <p>
+        Institutional systems also shaped how athletes were evaluated, recruited, and developed long before
+        reaching professional football. In <em>Race, Colonization and the NFL Draft: A Fanonian Analysis of the
+        Interviewing of Black NFL Prospects</em>, Drew Brown (2023) argues that scouting and interview practices
+        frequently categorized athletes through racialized assumptions about leadership potential, composure,
+        and discipline. These evaluation systems influenced not only draft outcomes, but also broader
+        developmental pipelines throughout football culture. Because scouting reports, coaching decisions, and
+        recruitment systems strongly influenced positional assignment, institutional bias became embedded
+        directly into how athletes were developed within the sport.
+      </p>
+
+      <p>
+        Rather than operating through explicit racial exclusion, modern football organizations often reproduced
+        inequality through coded language and standardized evaluation practices. Traits such as “leadership,”
+        “coachability,” “football IQ,” and “professionalism” frequently carried implicit racial assumptions that
+        shaped how athletes and coaching candidates were perceived within organizational settings. These
+        systems allowed racial inequality to persist institutionally even as overt forms of discrimination became
+        less publicly acceptable.
+      </p>
+
+      <div class="visual-block viz-risk-authority">
+        <iframe
+          class="lazy-viz"
+          data-src="./visualizations/risk-authority/"
+          title="Risk vs Authority Bubble Charts"
+          scrolling="no">
+        </iframe>
+      </div>
+
+      <p>
+        The visualizations above demonstrate how these institutional patterns continue shaping modern
+        positional structures within the NFL. Using a 2024 NFL depth chart dataset containing approximately
+        2,700 active players, the charts compare racial concentration across positions associated with varying
+        levels of symbolic authority and bodily risk. Positions such as quarterback remain disproportionately
+        white and cluster more closely around positions associated with strategic authority, while positions such
+        as running back, wide receiver, and defensive back remain heavily concentrated with Black athletes and
+        align more closely with positions associated with physical exposure and bodily labor. The comparison
+        between Black player distribution and white player distribution illustrates how organizational systems
+        continue reproducing racialized positional hierarchies within the modern NFL.
+      </p>
+
+      <div class="visual-block viz-heatmap">
+        <iframe
+          class="lazy-viz"
+          data-src="./visualizations/heatmap/"
+          title="Race by Position Heatmap"
+          scrolling="no">
+        </iframe>
+      </div>
+
+      <p>
+        The heatmap further demonstrates the persistence of these demographic patterns across major NFL
+        positional groups using the same 2024 player dataset. Although the NFL frequently presents itself as a
+        meritocratic institution in which athletes succeed purely through talent and effort, the league’s positional
+        demographics continue reflecting longstanding organizational patterns surrounding leadership,
+        authority, and positional assignment. While some diversity has increased in positions such as
+        quarterback, broader racial concentration patterns remain remarkably consistent with the institutional
+        structures established during earlier periods of racial exclusion.
+      </p>
+
+      <p>
+        These institutional systems carried consequences extending beyond representation alone. By
+        disproportionately concentrating Black athletes within positions associated with physical exposure and
+        bodily sacrifice, organizational structures also shaped how bodily risk and injury burden became
+        distributed throughout football. Institutional discrimination therefore influenced not only who occupied
+        positions of authority, but also which athletes were most exposed to long-term physical consequence.
+        Understanding how football organizations distributed athletes across positions is therefore essential for
+        examining how racial inequality became tied directly to bodily harm within the modern NFL.
+      </p>
+    </section>
+
+    <section id="risk" class="content-section">
+      <div class="section-kicker">Section 3</div>
+      <h2>Bodily Risk and Injury Burden</h2>
+
+      <figure class="section-image image-right">
+        <img 
+            src="./TylerBadie.jpg" 
+            alt="A football player being tackled during a game" 
+            class="expandable-image"
+            data-caption="High-contact positions make bodily risk visible: collision, acceleration, and open-field contact become
+          central forms of labor within the NFL."
+            />
+        <figcaption>
+          High-contact positions make bodily risk visible: collision, acceleration, and open-field contact become
+          central forms of labor within the NFL.
+        </figcaption>
+      </figure>
+
+      <p>
+        The institutional systems shaping positional assignment within football carried consequences extending
+        far beyond representation alone. By disproportionately concentrating Black athletes within positions
+        associated with speed, collision, and bodily exposure, racial stacking also influenced how physical risk
+        and long-term injury burden became distributed throughout the sport. As a result, the historical
+        separation between “thinking” positions and “physical” positions did not simply shape leadership
+        opportunities—it also shaped which athletes were most exposed to bodily harm.
+      </p>
+
+      <p>
+        Football has long relied upon a labor structure in which certain positions absorb significantly greater
+        physical punishment than others. Running backs, wide receivers, linebackers, defensive linemen, and
+        defensive backs experience repeated high-speed collisions, open-field tackles, trench contact, and
+        physically demanding workloads throughout both games and practices. Quarterbacks, by contrast, often
+        receive greater institutional protection through rules, offensive schemes, and positional value. Because
+        Black athletes became disproportionately concentrated within many of these physically intensive
+        positions, the unequal distribution of bodily risk became deeply connected to racialized positional
+        systems.
+      </p>
+
+      <p>
+        This relationship between race and bodily consequence reflects broader historical patterns discussed
+        throughout earlier sections of this project. As sociologists studying race and sport have argued, Black
+        athletes were historically valued within football institutions primarily for bodily performance and physical
+        labor rather than leadership or organizational authority (Coakley, 2012). Drew Brown’s <em>Race,
+        Colonization and the NFL Draft: A Fanonian Analysis of the Interviewing of Black NFL Prospects</em>
+        further explains that scouting and recruitment systems frequently framed Black athletes through
+        assumptions emphasizing physical explosiveness, athletic upside, and bodily performance rather than
+        strategic leadership or intellectual control (Brown, 2023). These institutional patterns helped funnel
+        Black athletes toward positions carrying elevated levels of physical exposure and long-term bodily
+        sacrifice.
+      </p>
+
+      <p>
+        Importantly, the unequal distribution of bodily risk within football also shaped how athletes were valued
+        economically and institutionally. In <em>Tackling Bias: The Racial Lens on NFL Injury Compensation</em>,
+        the author argues that racial disparities influenced not only positional assignment, but also how injury
+        and long-term physical damage were interpreted and compensated within football organizations
+        (“Tackling Bias,” 2024). The article explains that Black athletes were often expected to endure greater
+        levels of physical sacrifice while simultaneously facing structural disadvantages within compensation
+        systems related to injury and long-term neurological harm. These disparities demonstrate that racial
+        inequality within football extended beyond access to leadership positions and became tied directly to
+        bodily consequence.
+      </p>
+
+      <div class="visual-block viz-injury">
+        <iframe
+          class="lazy-viz"
+          data-src="./visualizations/injury-risk/"
+          title="Injury Burden vs Black Player Share"
+          scrolling="no">
+        </iframe>
+      </div>
+
+      <p>
+        The visualization above demonstrates the relationship between racial concentration and injury burden
+        across major NFL positional groups. To improve positional accuracy, the visualization combines the
+        original injury dataset with detailed positional roster data from nflverse, allowing broader defensive
+        categories to be separated into defensive back (DB), linebacker (LB), and defensive line (DL) groupings
+        rather than treating all defensive players as a single category. The merged dataset draws from NFL
+        player and injury records spanning multiple seasons between 2009 and 2017 and compares average
+        injury burden alongside the percentage of Black players occupying each position group. Bubble size
+        represents the cumulative number of games missed due to injury within each positional category, while
+        the x-axis measures average injury burden and the y-axis measures Black player representation.
+      </p>
+
+      <p>
+        Several important patterns emerge from the visualization. Running back remains the clearest example
+        of racialized bodily exposure within the modern NFL. The position combines the highest injury burden in
+        the dataset with the highest percentage of Black player representation, reinforcing the project’s broader
+        argument that the positions most associated with Black athletes often carry elevated physical
+        consequences. Wide receiver, defensive back, defensive line, and linebacker positions also show high
+        Black representation, though their injury burden varies by role. This variation is important because it
+        shows that racialized bodily exposure is not evenly distributed across every Black-majority position;
+        rather, it depends on the specific physical demands of each positional role.
+      </p>
+
+      <p>
+        At the same time, the visualization complicates simplistic assumptions regarding bodily risk by revealing
+        the unique position occupied by offensive linemen. Offensive line positions contain substantially lower
+        Black representation than many other physically intensive positions—approximately 36.3% within this
+        dataset—yet they produce one of the largest bubbles in the visualization, indicating a high cumulative
+        number of games missed due to injury. This suggests that bodily exposure within football is not
+        distributed solely through race, but also through the structural demands associated with particular forms
+        of labor within the sport. Offensive linemen experience constant physical strain through repetitive
+        contact, joint stress, and trench collisions despite occupying a positional category that is not majority
+        Black.
+      </p>
+
+      <p>
+        The separation of defensive positions into DB, LB, and DL categories also reveals important internal
+        variation within defensive labor itself. Defensive backs and defensive linemen maintain high Black
+        representation, while linebackers occupy a somewhat more moderate position between defensive and
+        offensive extremes. By disaggregating defense into more precise positional groups through the nflverse
+        roster merge, the visualization avoids overstating defensive labor as a singular category and instead
+        demonstrates how bodily exposure varies across different forms of defensive responsibility. This
+        methodological refinement strengthens the broader argument that racial stacking operates not simply
+        across offense versus defense, but across highly specific forms of positional labor.
+      </p>
+
+      <p>
+        The distribution shown above reflects more than coincidence. The positions most heavily associated
+        with Black athletes remain among the most physically punishing positions within football itself. Running
+        backs, defensive backs, defensive linemen, linebackers, and wide receivers experience bodily exposure
+        through repeated collisions, tackling responsibilities, acceleration demands, and open-field contact.
+        These positional demands increase the likelihood of missed games, accumulated physical wear, and
+        long-term injury risk. Consequently, racial stacking did not simply determine who occupied leadership
+        positions; it also influenced which athletes disproportionately absorbed the physical consequences of the
+        sport.
+      </p>
+
+      <p>
+        Importantly, these inequalities were not accidental byproducts of athletic specialization alone. Rather,
+        they emerged through decades of institutional decision-making, recruitment systems, scouting
+        practices, and organizational assumptions surrounding race and labor. Football organizations
+        consistently directed Black athletes toward positions emphasizing physical production while preserving
+        positions associated with leadership, authority, and institutional control for white athletes. The unequal
+        distribution of injury burden therefore reflects the material consequences of racial stacking itself.
+      </p>
+
+      <p>
+        At the same time, football culture frequently normalized these disparities through media narratives that
+        framed Black athletes as naturally suited for physically demanding positions. Descriptions emphasizing
+        aggression, explosiveness, toughness, and “natural athleticism” helped reinforce the belief that bodily
+        sacrifice was an expected or inherent aspect of Black athletic participation. Understanding how these
+        narratives circulated throughout football media and public discourse is therefore essential for examining
+        how racial inequality became culturally reinforced within the modern NFL.
+      </p>
+    </section>
+
+    <section id="media" class="content-section">
+      <div class="section-kicker">Section 4</div>
+      <h2>Media Narratives and Cultural Reinforcement</h2>
+
+      <figure class="section-image image-left">
+        <img 
+            src="./Draft.jpg" 
+            alt="Television analysts seated at an NFL Draft broadcast desk"
+            class="expandable-image"
+            data-caption="Draft coverage and scouting discourse help translate institutional evaluations into public narratives
+          about intelligence, athleticism, leadership, and positional value."
+            />
+        <figcaption>
+          Draft coverage and scouting discourse help translate institutional evaluations into public narratives
+          about intelligence, athleticism, leadership, and positional value.
+        </figcaption>
+      </figure>
+
+      <p>
+        Although racial stacking shaped the structural organization of football, media discourse and scouting
+        language helped normalize and reinforce those divisions culturally. Long after Black athletes began
+        entering positions previously dominated by white players, commentators, scouts, journalists, and
+        executives continued describing players through racialized assumptions about intelligence, athleticism,
+        leadership, and emotional control. These narratives did not simply reflect existing stereotypes; they
+        actively reproduced them for audiences, organizations, and future generations of players. Through
+        television commentary, scouting reports, draft analysis, and sports journalism, football culture repeatedly
+        framed white athletes as intellectual leaders while presenting Black athletes as naturally physical,
+        instinctive, or athletically gifted.
+      </p>
+
+      <p>
+        The persistence of these narratives is especially visible in discussions surrounding the quarterback
+        position. For decades, quarterback was treated as the symbolic center of intelligence and leadership in
+        football culture. As discussed earlier, Black quarterbacks historically faced skepticism because owners,
+        coaches, and media commentators associated the position with rationality, discipline, and
+        decision-making—traits culturally coded as white. <em>The Guardian</em>’s analysis of Black quarterbacks
+        explains that many critics continued to describe Black quarterbacks as “athletes first” even when they
+        demonstrated elite passing ability and strategic intelligence (Powell, 2019). Rather than evaluating
+        quarterbacks equally, media narratives often separated white quarterbacks into “thinking” categories
+        and Black quarterbacks into “physical” categories.
+      </p>
+
+      <p>
+        This pattern extended beyond commentary and into the formal language used during scouting and draft
+        evaluation processes. Lund and Katballe-Kristensen’s leadership stereotype study demonstrates that
+        online scouting profiles systematically framed quarterbacks differently depending on race. White
+        quarterbacks were significantly more likely to receive descriptors associated with intelligence,
+        leadership, composure, and personality, while African American quarterbacks were more frequently
+        associated with athleticism and raw physical talent. The study found that white quarterbacks averaged
+        1.68 intelligence-related concepts per scouting profile compared to only 0.95 for Black quarterbacks,
+        while Black quarterbacks averaged 1.77 athleticism-related concepts compared to only 0.34 for white
+        quarterbacks (Lund & Katballe-Kristensen, 2025). These differences reveal how racial stereotypes
+        became embedded within supposedly objective systems of player evaluation.
+      </p>
+
+      <div class="visual-block viz-scouting">
+        <iframe
+          class="lazy-viz"
+          data-src="./visualizations/scouting-language/"
+          title="Scouting Language by Quarterback Race"
+          scrolling="no">
+        </iframe>
+      </div>
+
+      <p>
+        The visualization above illustrates how racialized scouting language differed between white and African
+        American quarterbacks in online NFL draft profiles. Using data from Lund and Katballe-Kristensen’s
+        analysis of 132 scouting reports covering 66 quarterbacks, the chart compares the average number of
+        coded descriptor concepts assigned to each racial group across intelligence, athleticism, and personality
+        categories. White quarterbacks received substantially more intelligence and personality-oriented
+        descriptors, while Black quarterbacks received dramatically more athleticism-oriented language. The
+        visualization demonstrates how evaluative language itself reinforced racial assumptions about
+        leadership and physicality. Even before entering the NFL, quarterbacks were framed through narratives
+        that associated whiteness with intelligence and Blackness with athletic instinct.
+      </p>
+
+      <p>
+        These patterns connect directly to the broader sociological concept of “natural athleticism” narratives.
+        The sociology review article argues that Black athletes have historically been portrayed as naturally
+        gifted bodies rather than disciplined intellectual competitors. Such framing minimizes preparation,
+        strategic understanding, and leadership while emphasizing instinct and physical superiority. White
+        athletes, by contrast, are more frequently described through narratives emphasizing work ethic,
+        intelligence, preparation, and mental discipline. These distinctions may appear subtle, but repeated
+        exposure to such language shapes audience perception over time. Media consumers begin
+        unconsciously associating Black athletes with bodily performance while associating white athletes with
+        intelligence, authority, and leadership.
+      </p>
+
+      <p>
+        Drew Brown’s <em>Race, Colonization and the NFL Draft</em> extends this argument by explaining how
+        scouting and evaluative systems reproduce racial hierarchy through coded language. Brown argues
+        that NFL evaluation processes frequently positioned Black prospects within stereotypes connected to
+        aggression, violence, athleticism, and emotionality while framing white prospects as disciplined
+        decision-makers capable of leadership and authority (Brown, 2010). Importantly, these narratives were
+        often presented as neutral football analysis rather than overt racism. Because the stereotypes operated
+        through subtle evaluative language rather than explicit exclusion, they became easier to normalize
+        within football culture.
+      </p>
+
+      <p>
+        The influence of these narratives extends beyond media representation alone. Scouting reports,
+        commentary, and draft analysis shape public expectations, organizational decision-making, and even
+        player self-perception. When Black quarterbacks are consistently described as athletic rather than
+        intelligent, organizations become more likely to question their leadership ability, audiences become
+        more skeptical of their decision-making, and coaching staffs may unconsciously evaluate them
+        differently. Media discourse therefore functions as a cultural reinforcement mechanism that helps sustain
+        institutional inequality within football.
+      </p>
+
+      <p>
+        These narratives also help justify the unequal structures examined throughout this project. The same
+        stereotypes that framed Black athletes as naturally physical contributed to their concentration within
+        higher-risk positions, their exclusion from leadership roles, and the normalization of bodily sacrifice
+        within the sport. By repeatedly associating Black athletes with physicality rather than intellect, football
+        culture reinforced the broader racial hierarchy that shaped positional segregation, institutional authority,
+        and bodily risk across the modern NFL.
+      </p>
+    </section>
+
+    <section id="reform" class="content-section">
+      <div class="section-kicker">Section 5</div>
+      <h2>Reform, Resistance, and the Present</h2>
+
+      <figure class="section-image image-right">
+        <img 
+            src="./JalenHurts.jpg" 
+            alt="Jalen Hurts holding a trophy while confetti falls"
+            class="expandable-image"
+            data-caption="Contemporary Black quarterback successes, such as Super Bowl champion Jalen Hurts, challenge older assumptions about leadership,
+          intelligence, and who can serve as the symbolic face of an NFL franchise."
+        />
+        <figcaption>
+          Contemporary Black quarterback successes, such as Super Bowl champion Jalen Hurts, challenge older assumptions about leadership,
+          intelligence, and who can serve as the symbolic face of an NFL franchise.
+        </figcaption>
+      </figure>
+
+      <p>
+        Although racial stacking and institutional inequality remain deeply embedded within football culture,
+        resistance to these structures has steadily expanded throughout the modern era of the NFL. Players,
+        coaches, journalists, scholars, and activists have increasingly challenged the racial assumptions that
+        historically shaped positional assignment, organizational power, and bodily labor within the sport. The
+        contemporary NFL exists within a period of contradiction: while major breakthroughs and reforms have
+        occurred, many of the structural inequalities explored throughout this project continue to persist in
+        subtler forms.
+      </p>
+
+      <p>
+        One of the clearest signs of change has been the increasing visibility and success of Black quarterbacks
+        in the modern NFL. For decades, Black athletes were systematically excluded from quarterback
+        because owners, coaches, and commentators associated the position with discipline, composure, and
+        decision-making traits culturally coded as white. However, the success of players such as Doug Williams,
+        Warren Moon, Randall Cunningham, Russell Wilson, Lamar Jackson, Patrick Mahomes, and Jalen Hurts
+        challenged the assumption that quarterback leadership was inherently tied to whiteness. Their success
+        demonstrated that the historical exclusion of Black quarterbacks reflected institutional prejudice rather
+        than athletic reality.
+      </p>
+
+      <p>
+        At the organizational level, the NFL also faced growing pressure to address racial inequality in hiring
+        practices. The implementation of the Rooney Rule represented one of the league’s most public attempts
+        to reform institutional discrimination by requiring teams to interview minority candidates for head coaching
+        positions. While the policy created additional opportunities for some candidates, scholars have argued
+        that it often functioned more as a symbolic reform than a complete structural transformation. Cunningham
+        and Melton (2011) explain that informal ownership networks, organizational culture, and unconscious
+        assumptions about leadership continued shaping hiring decisions even after formal diversity policies
+        were introduced. As a result, Black coaches and executives remained underrepresented relative to the
+        overwhelmingly Black player population.
+      </p>
+
+      <p>
+        Modern players and activists have also increasingly challenged the broader culture surrounding football
+        itself. Public conversations surrounding concussion trauma, player safety, racial inequality, and labor
+        exploitation have expanded dramatically during the past decade. Athletes have used interviews,
+        documentaries, social media, and public protest to criticize how the league profits from bodily sacrifice
+        while limiting player authority and long-term protection. Discussions surrounding Colin Kaepernick, player
+        activism, racial justice protests, and collective bargaining disputes demonstrate how football has become
+        a broader site of political and cultural conflict extending far beyond the field itself.
+      </p>
+
+      <p>
+        The rise of publicly available sports analytics and data has also created new opportunities to challenge
+        traditional narratives. Much of this project relied on public roster, injury, demographic, and scouting
+        datasets to visualize relationships that historically remained hidden beneath anecdotal discussion. By
+        combining positional demographics, injury burden data, scouting language analysis, and organizational
+        trends, these visualizations expose how racial inequality can persist through systems that often appear
+        neutral or meritocratic on the surface. Data visualization therefore becomes not only an analytical tool,
+        but also a method of revealing structural relationships between race, labor, organizational power, and
+        bodily risk within professional football.
+      </p>
+
+      <p>
+        Importantly, the persistence of racial stacking cannot be separated from the broader economic realities
+        facing many Black athletes. As several of the sources discussed throughout this project argue, football
+        has historically been presented as one of the few accessible paths toward wealth, social mobility, and
+        public recognition for young Black men in the United States. This promise of upward mobility helped
+        funnel Black athletes into positions associated with extreme bodily exposure and physical sacrifice.
+        Positions such as running back, defensive back, linebacker, and defensive line became both
+        opportunities for economic advancement and sites of disproportionate bodily risk. The league’s structure
+        therefore reflects a deeper contradiction: Black athletes were often encouraged to pursue success
+        through positions demanding the greatest physical punishment while remaining systematically
+        underrepresented within positions of long-term organizational power.
+      </p>
+
+      <p>
+        These tensions ultimately raise broader questions about meritocracy, institutional power, and the cultural
+        meaning of leadership within American sports. Although reforms and resistance movements have
+        challenged many historical barriers, the modern NFL continues reflecting broader social systems
+        connecting race, labor, bodily risk, and institutional inequality.
+      </p>
+    </section>
+
+    <section id="conclusion" class="content-section conclusion">
+      <div class="section-kicker">Conclusion</div>
+      <h2>Football as a Structure of Race, Labor, and Bodily Value</h2>
+
+      <figure class="section-image image-left">
+        <img 
+            src="./FootballField.jpg" 
+            alt="An empty football field under stadium lights at night" 
+            class="expandable-image"
+            data-caption="The empty field emphasizes the project’s central question: after the spectacle ends, what structures
+          of race, labor, risk, and value remain built into the game?"
+        />
+        <figcaption>
+          The empty field emphasizes the project’s central question: after the spectacle ends, what structures
+          of race, labor, risk, and value remain built into the game?
+        </figcaption>
+      </figure>
+
+      <p>
+        The history of racial stacking in American football reveals how sports can reproduce broader systems of
+        racial inequality while simultaneously presenting themselves as meritocratic spaces. Throughout the
+        development of the modern NFL, racial stereotypes shaped which athletes were trusted with strategic
+        responsibility and which athletes were directed toward positions emphasizing bodily labor, collision, and
+        physical sacrifice. Black athletes became disproportionately concentrated within positions associated
+        with speed, aggression, and physical punishment, while positions tied to organizational control and
+        symbolic leadership remained disproportionately white for much of football’s history.
+      </p>
+
+      <p>
+        The visualizations and datasets analyzed throughout this project demonstrate how these historical
+        structures continue influencing the modern NFL. Positional demographics reveal that Black athletes
+        remain heavily concentrated within positions associated with heightened physical exposure, while
+        leadership positions within coaching, executive management, and ownership remain disproportionately
+        white. Injury burden analysis further demonstrates that many positions most associated with Black
+        athletes frequently carry elevated levels of bodily risk and physical consequence. At the same time,
+        scouting language and media discourse continue reproducing subtle distinctions between “intelligent”
+        leadership and “natural” athleticism that mirror older racial stereotypes surrounding football labor.
+      </p>
+
+      <p>
+        Importantly, these inequalities cannot be separated from the broader economic realities surrounding
+        football itself. For many Black athletes, football has historically represented one of the few visible paths
+        toward wealth, social mobility, education, and public recognition within the United States. The promise of
+        upward mobility encouraged generations of Black athletes to pursue success within positions demanding
+        extraordinary physical sacrifice and long-term bodily risk. As a result, football became both a source of
+        opportunity and a system of exploitation.
+      </p>
+
+      <p>
+        At the same time, resistance to these structures has continued expanding throughout the modern era of
+        football. The rise of Black quarterbacks, player activism, minority hiring initiatives, and increasing public
+        discussions surrounding race and bodily risk demonstrate that many athletes, scholars, journalists, and
+        activists continue challenging the assumptions historically embedded within the sport. By combining
+        historical research with modern data visualization, this project demonstrates how computational analysis
+        can strengthen critical examinations of race and institutional power within sports culture.
+      </p>
+
+      <p>
+        Ultimately, racial stacking in football reflects larger tensions within American society itself. Football
+        became a cultural space where assumptions about race, labor, leadership, and bodily value were
+        organized into visible hierarchies and reproduced across generations. Although important progress has
+        occurred, the persistence of unequal representation, bodily risk, and institutional authority demonstrates
+        that these systems have not fully disappeared.
+      </p>
+    </section>
+
+     <section id="bibliography" class="content-section bibliography">
+      <div class="section-kicker">Bibliography</div>
+      <h2>Sources and Datasets</h2>
+
+      <ul class="bibliography-list">
+        <li>
+          <em>Against racial stacking: The evolution of the Black quarterback in American football</em>. (2024).
+        </li>
+
+        <li>
+          Brown, D. (2023). <em>Race, colonization and the NFL Draft: A Fanonian analysis of the interviewing of Black NFL prospects</em>.
+        </li>
+
+        <li>
+          Clementzach. (n.d.). <em>BST_260_project</em> [GitHub repository]. GitHub.
+          <a href="https://github.com/clementzach/BST_260_project" target="_blank" rel="noopener noreferrer">
+            https://github.com/clementzach/BST_260_project
+          </a>
+        </li>
+
+        <li>
+          Coakley, J. (2012). <em>Race and sport: A sociology review article</em>.
+        </li>
+
+        <li>
+          Cunningham, G. B., &amp; Melton, E. N. (2011). <em>The NFL’s Rooney Rule and its implications on affirmative action and hiring policies in professional sports</em>.
+        </li>
+
+        <li>
+          Dator, J. (2019). <em>The racial stereotypes still surrounding Black quarterbacks</em>. <em>The Guardian</em>.
+        </li>
+
+        <li>
+          DeepFace. (n.d.). <em>DeepFace: A lightweight face recognition and facial attribute analysis framework for Python</em>.
+        </li>
+
+        <li>
+          Deis, A. (n.d.). <em>NFL injury analysis</em> [Kaggle notebook]. Kaggle.
+          <a href="https://www.kaggle.com/code/aleksandradeis/nfl-injury-analysis" target="_blank" rel="noopener noreferrer">
+            https://www.kaggle.com/code/aleksandradeis/nfl-injury-analysis
+          </a>
+        </li>
+
+        <li>
+          Hashtag Football. (n.d.). <em>NFL injury data</em>.
+          <a href="https://hashtagfootball.com/nfl-injury" target="_blank" rel="noopener noreferrer">
+            https://hashtagfootball.com/nfl-injury
+          </a>
+        </li>
+
+        <li>
+          Independent. (2024, October 7). <em>Tyler Badie injury update after Broncos running back suffers scary back injury</em>.
+          <a href="https://www.independent.co.uk/news/world/americas/tyler-badie-denver-broncos-nfl-b2620947.html" target="_blank" rel="noopener noreferrer">
+            https://www.independent.co.uk/news/world/americas/tyler-badie-denver-broncos-nfl-b2620947.html
+          </a>
+        </li>
+
+        <li>
+          Kaggle. (n.d.). <em>NFL playing surface analytics</em> [Data competition].
+          <a href="https://www.kaggle.com/competitions/nfl-playing-surface-analytics" target="_blank" rel="noopener noreferrer">
+            https://www.kaggle.com/competitions/nfl-playing-surface-analytics
+          </a>
+        </li>
+
+        <li>
+          Lund, A., &amp; Katballe-Kristensen, M. (2025). <em>Leadership and intelligence stereotypes in online NFL quarterback scouting profiles</em>.
+        </li>
+
+        <li>
+          National Football League. (n.d.). <em>Injury data</em>. NFL Player Health &amp; Safety.
+          <a href="https://www.nfl.com/playerhealthandsafety/health-and-wellness/injury-data/" target="_blank" rel="noopener noreferrer">
+            https://www.nfl.com/playerhealthandsafety/health-and-wellness/injury-data/
+          </a>
+        </li>
+
+        <li>
+          nflverse. (n.d.). <em>nflverse documentation</em>.
+          <a href="https://nflverse.nflverse.com/" target="_blank" rel="noopener noreferrer">
+            https://nflverse.nflverse.com/
+          </a>
+        </li>
+
+        <li>
+          On3 Sports. (2022, December 1). <em>Mel Kiper Jr. releases updated big board for the 2023 NFL Draft ahead of bowl season</em>.
+          <a href="https://www.on3.com/news/mel-kiper-jr-releases-updated-big-board-for-the-2023-nfl-draft-ahead-of-bowl-season/" target="_blank" rel="noopener noreferrer">
+            https://www.on3.com/news/mel-kiper-jr-releases-updated-big-board-for-the-2023-nfl-draft-ahead-of-bowl-season/
+          </a>
+        </li>
+
+        <li>
+          Powell, S. (2019). <em>Black quarterbacks and the stereotypes that continue to follow them</em>. <em>The Guardian</em>.
+        </li>
+
+        <li>
+          Sammieerne. (n.d.). <em>NFL-Injury-Analysis</em> [GitHub repository]. GitHub.
+          <a href="https://github.com/sammieerne/NFL-Injury-Analysis" target="_blank" rel="noopener noreferrer">
+            https://github.com/sammieerne/NFL-Injury-Analysis
+          </a>
+        </li>
+
+        <li>
+          Sports Illustrated. (2023, February 12). <em>Celebrating Black History: Super Bowl champion Jalen Hurts becomes fourth Black quarterback in Super Bowl history</em>.
+          <a href="https://www.si.com/collectibles/news/celebrating-black-history-super-bowl-champion-jalen-hurts-becomes-fourth-black-quarterback-in-event-history" target="_blank" rel="noopener noreferrer">
+            https://www.si.com/collectibles/news/celebrating-black-history-super-bowl-champion-jalen-hurts-becomes-fourth-black-quarterback-in-event-history
+          </a>
+        </li>
+
+        <li>
+          <em>Tackling bias: The racial lens on NFL injury compensation</em>. (2024).
+        </li>
+
+        <li>
+          Vecteezy. (n.d.). <em>An empty football stadium at night illuminated by bright lights</em> [Photograph].
+          <a href="https://www.vecteezy.com/photo/68529307-an-empty-football-stadium-at-night-illuminated-by-bright-lights" target="_blank" rel="noopener noreferrer">
+            https://www.vecteezy.com/photo/68529307-an-empty-football-stadium-at-night-illuminated-by-bright-lights
+          </a>
+        </li>
+
+        <li>
+          Wikimedia Commons. (n.d.). <em>Fritz Pollard</em> [Photograph].
+          <a href="https://commons.wikimedia.org/wiki/File:Fritzpollard.jpg" target="_blank" rel="noopener noreferrer">
+            https://commons.wikimedia.org/wiki/File:Fritzpollard.jpg
+          </a>
+        </li>
+      </ul>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="footer-links">
+      <a href="https://www.linkedin.com/in/leifblake/" target="_blank" rel="noopener noreferrer">LinkedIn</a>
+      <a href="https://leifblake.net/" target="_blank" rel="noopener noreferrer">Portfolio</a>
+      <a href="https://github.com/leifblake" target="_blank" rel="noopener noreferrer">GitHub</a>
+    </div>
+  </footer>
+
+  <!-- Image Lightbox Modal -->
+  <div class="image-lightbox" id="imageLightbox">
+    <div class="lightbox-content">
+      <img id="lightboxImage" src="" alt="">
+      <p id="lightboxCaption"></p>
+    </div>
+  </div>
+
+  <script type="module" src="./src/main.js"></script>
+</body>
+</html>

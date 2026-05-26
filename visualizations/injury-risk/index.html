@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Injury Risk Overlay</title>
+  <link rel="stylesheet" href="./injury-risk.css" />
+</head>
+<body>
+  <main class="page">
+    <section class="intro">
+      <p class="eyebrow">Bodily Risk & Positional Demographics</p>
+      <h1>Injury Burden vs. Black Player Share</h1>
+      <p>
+        This visualization compares average injury burden by position group with the percentage of Black players
+        represented in each position. It connects modern positional demographics to bodily risk.
+      </p>
+    </section>
+
+    <section class="chart-card">
+      <div id="injury-risk"></div>
+      <div id="tooltip" class="tooltip"></div>
+      <p class="note">
+        Hover over a point to see injury burden, games missed, player-seasons, and Black player share.
+      </p>
+    </section>
+  </main>
+
+  <script type="module" src="./injury-risk.js"></script>
+</body>
+</html>

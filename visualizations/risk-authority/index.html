@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Risk vs Authority Bubble Plot</title>
+  <link rel="stylesheet" href="./risk-authority.css" />
+</head>
+<body>
+  <main class="page">
+    <section class="intro">
+      <p class="eyebrow">Modern NFL Positional Hierarchy</p>
+      <h1>Risk vs. Authority</h1>
+      <p>
+        This bubble plot compares physical risk and symbolic authority across NFL position groups.
+        Bubble size represents the percentage of Black/White players in each position group.
+      </p>
+    </section>
+
+    <section class="chart-card">
+      <div id="risk-authority-black"></div>
+
+<div class="chart-divider"></div>
+
+<div id="risk-authority-white"></div>
+
+<div id="tooltip" class="tooltip"></div>
+<p class="note">
+        Hover over a bubble to see positional demographics, risk level, and authority level.
+      </p>
+    </section>
+  </main>
+
+  <script type="module" src="./risk-authority.js"></script>
+</body>
+</html>
