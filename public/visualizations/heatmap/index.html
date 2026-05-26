@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>NFL Race by Position Heatmap</title>
+  <link rel="stylesheet" href="./heatmap.css" />
+</head>
+<body>
+  <main class="page">
+    <section class="intro">
+      <p class="eyebrow">Modern NFL Positional Demographics</p>
+      <h1>Race by Position Heatmap</h1>
+      <p>
+        This heatmap shows the percentage of each position group represented by each inferred racial category.
+        Darker cells indicate higher concentration within that position.
+      </p>
+    </section>
+
+    <section class="chart-card">
+      <div id="heatmap"></div>
+      <div id="tooltip" class="tooltip"></div>
+      <p class="note">
+        Hover over a cell to see the exact count and percentage for each race-position pairing.
+      </p>
+    </section>
+  </main>
+
+  <script type="module" src="./heatmap.js"></script>
+</body>
+</html>

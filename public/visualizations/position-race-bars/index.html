@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <title>Modern NFL Race Distribution by Position Group</title>
+
+  <link rel="stylesheet" href="./position-race-bars.css" />
+</head>
+
+<body>
+  <main class="page">
+    <section class="intro">
+      <p class="eyebrow">Methodology & Dataset Overview</p>
+      <h1>Modern NFL Race Distribution by Position Group</h1>
+      <p>
+        This stacked bar chart shows the racial composition of each major NFL position group in the cleaned
+        2024 depth chart dataset. Each bar represents one position group, and each color segment represents
+        the percentage of that position group categorized within an inferred racial category.
+      </p>
+    </section>
+
+    <section class="chart-card">
+      <div id="position-race-bars"></div>
+      <div id="tooltip" class="tooltip"></div>
+    </section>
+
+    <p class="note">
+      Hover over a segment to see the exact race-position percentage and player count.
+    </p>
+  </main>
+
+  <script type="module" src="./position-race-bars.js"></script>
+</body>
+</html>
