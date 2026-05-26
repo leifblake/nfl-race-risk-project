@@ -1,0 +1,9 @@
+position_group,risk_score,authority_score,risk_level,authority_level,risk_description,authority_description
+QB,1,5,Lower,Very High,Less routine collision exposure compared with most positions,Highest symbolic leadership role; associated with decision-making and franchise visibility
+RB,5,1,High,Low,Frequent tackling and heavy bodily wear,Often treated as replaceable short-career labor
+WR,3,2,Medium,Medium,Open-field collision exposure and high-speed impacts,Highly visible skill role but less institutional authority than quarterback
+DB,5,2,High,Medium,High-speed collisions and frequent tackling,Defensive visibility but limited symbolic leadership compared with quarterback
+LB,5,3,High,Medium/High,Repeated tackling and central defensive contact,Defensive leadership role but less media authority than quarterback
+OL,4,3,High,Medium/High,Repeated trench contact on nearly every play,Strategic protection role with communication responsibilities
+DL,4,2,High,Medium,Repeated trench collisions and pass-rush contact,Physically central but usually less symbolic authority
+TE,3,3,Medium/High,Medium/High,Hybrid blocking and receiving contact,Hybrid role associated with versatility and tactical responsibility

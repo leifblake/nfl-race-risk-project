@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>NFL Race to Position Sankey</title>
+  <link rel="stylesheet" href="./sankey.css" />
+</head>
+<body>
+  <main class="page">
+    <section class="intro">
+      <p class="eyebrow">Modern NFL Positional Demographics</p>
+      <h1>Race → Position Flow</h1>
+      <p>
+        This Sankey diagram visualizes how inferred racial categories are distributed
+        across modern NFL position groups.
+      </p>
+    </section>
+
+    <section class="chart-card">
+      <div id="sankey"></div>
+      <div id="tooltip" class="tooltip"></div>
+      <p class="note">
+        Hover over a flow for count, percentage, position description, and risk level.
+        Click a race, position, or flow to isolate it. Click empty space to reset.
+      </p>
+    </section>
+  </main>
+
+  <script type="module" src="./sankey.js"></script>
+</body>
+</html>
