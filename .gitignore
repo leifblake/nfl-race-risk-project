@@ -2,3 +2,15 @@ node_modules
 dist
 .DS_Store
 .vscode
+
+# Python / local environment
+.venv
+venv
+__pycache__
+*.pyc
+requirements.txt
+pyproject.toml
+uv.lock
+Pipfile
+poetry.lock
+.python-version
