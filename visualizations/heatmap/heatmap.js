@@ -1,4 +1,4 @@
-import * as d3 from "d3";
+import * as d3 from "https://cdn.jsdelivr.net/npm/d3@7/+esm";
 
 const dataPath = "/nfl-race-risk-project/data/cleaned/modern_position_race_summary.csv";
 

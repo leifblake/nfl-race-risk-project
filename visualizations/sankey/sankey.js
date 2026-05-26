@@ -1,5 +1,5 @@
-import * as d3 from "d3";
-import { sankey, sankeyLinkHorizontal } from "d3-sankey";
+import * as d3 from "https://cdn.jsdelivr.net/npm/d3@7/+esm";
+import { sankey, sankeyLinkHorizontal } from "https://cdn.jsdelivr.net/npm/d3-sankey@0.12/+esm";
 
 const dataPath = "/nfl-race-risk-project/data/modern_players_clean.csv";
 

@@ -1,4 +1,4 @@
-import * as d3 from "d3";
+import * as d3 from "https://cdn.jsdelivr.net/npm/d3@7/+esm";
 
 const width = 1120;
 const height = 560;

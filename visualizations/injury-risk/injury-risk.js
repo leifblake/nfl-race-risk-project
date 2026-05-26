@@ -1,4 +1,4 @@
-import * as d3 from "d3";
+import * as d3 from "https://cdn.jsdelivr.net/npm/d3@7/+esm";
 
 const dataPath = "/nfl-race-risk-project/data/cleaned/position_injury_risk.csv";
 const width = 1120;
