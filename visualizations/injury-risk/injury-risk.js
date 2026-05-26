@@ -1,6 +1,6 @@
 import * as d3 from "d3";
 
-const dataPath = "../../data/cleaned/position_injury_risk.csv";
+const dataPath = "/data/cleaned/position_injury_risk.csv";
 
 const width = 1120;
 const height = 560;
