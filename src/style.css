@@ -111,7 +111,7 @@ body {
 
 .hero,
 .content-section {
-  width: min(1760px, 96vw);
+  width: min(1180px, 92vw);
   margin: 0 auto;
 }
 
@@ -134,12 +134,12 @@ body {
 }
 
 h1 {
-  max-width: 1320px;
+  max-width: 1120px;
   margin: 0;
 
-  font-size: clamp(3.4rem, 6.8vw, 7.6rem);
-  line-height: 0.88;
-  letter-spacing: -0.06em;
+  font-size: clamp(3rem, 5.6vw, 6.2rem);
+  line-height: 0.9;
+  letter-spacing: -0.055em;
 
   background:
     linear-gradient(

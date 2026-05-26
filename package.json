@@ -3,11 +3,11 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "vite",
-    "build": "vite build",
-    "preview": "vite preview"
-  },
+  "dev": "vite",
+  "build": "vite build",
+  "preview": "vite preview",
+  "deploy": "npm run build && gh-pages -d dist"
+},
   "keywords": [],
   "author": "",
   "license": "ISC",
@@ -16,5 +16,8 @@
     "d3": "^7.9.0",
     "d3-sankey": "^0.12.3",
     "vite": "^8.0.14"
+  },
+  "devDependencies": {
+    "gh-pages": "^6.3.0"
   }
 }
