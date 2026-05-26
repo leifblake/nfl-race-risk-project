@@ -1,6 +1,6 @@
 import * as d3 from "d3";
 
-const dataPath = "../../data/cleaned/modern_position_race_summary.csv";
+const dataPath = "/nfl-race-risk-project/data/cleaned/modern_position_race_summary.csv";
 
 const width = 1120;
 const height = 560;
