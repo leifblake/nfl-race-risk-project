@@ -1,7 +1,6 @@
 import * as d3 from "d3";
 
-const dataPath = "/data/cleaned/position_injury_risk.csv";
-
+const dataPath = "/nfl-race-risk-project/data/cleaned/position_injury_risk.csv";
 const width = 1120;
 const height = 560;
 const margin = { top: 125, right: 60, bottom: 82, left: 92 };

@@ -1,6 +1,6 @@
 import * as d3 from "d3";
 
-const dataPath = "/data/manual/historical_timeline.csv";
+const dataPath = "/nfl-race-risk-project/data/manual/historical_timeline.csv";
 
 const width = 1120;
 const height = 520;

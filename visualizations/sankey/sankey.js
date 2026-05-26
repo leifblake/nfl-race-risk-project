@@ -1,7 +1,7 @@
 import * as d3 from "d3";
 import { sankey, sankeyLinkHorizontal } from "d3-sankey";
 
-const dataPath = "../data/modern_players_clean.csv";
+const dataPath = "/nfl-race-risk-project/data/modern_players_clean.csv";
 
 const raceColors = {
   "Black": "#6C8EBF",
